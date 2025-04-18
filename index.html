@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>OTT Service Provider</title>
+      <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+      <style>
+        body {
+          font-family: 'Inter', sans-serif;
+          background-color: #f0f7ff;
+          overflow-y: auto;
+          /* Enable vertical scrolling */
+        }
+
+        .premium-card {
+          background-color: white;
+          border-radius: 32px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .plan-card {
+          border-radius: 16px;
+          transition: all 0.3s ease;
+        }
+
+        .plan-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .selected {
+          border: 3px solid #ff9500;
+          transform: scale(1.05);
+        }
+
+        .login-container {
+          background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .login-card {
+          backdrop-filter: blur(10px);
+          background-color: rgba(255, 255, 255, 0.8);
+          border-radius: 20px;
+          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+          padding: 2rem;
+          width: 100%;
+          max-width: 480px;
+          position: relative;
+          z-index: 1;
+        }
+
+        .mascot-image {
+          position: absolute;
+          width: 150px;
+          opacity: 0.7;
+          animation: float 5s ease-in-out infinite;
+          z-index: 2;
+          /* Ensure the mascot is above the login card */
+          top: 5%;
+          /* Position above the login card */
+          left: 50%;
+          /* Center horizontally */
+          transform: translateX(-50%);
+          /* Adjust for centering */
+        }
+
+        /* Center the login card */
+        .login-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+        }
+
+        /* Adjust the mascot position for better centering */
+        .login-container {
+          position: relative;
+        }
+
+        .mascot-image {
+          position: absolute;
+          top: 0%;
+          /* Adjust the top position */
+          left: 50%;
+          transform: translateX(-50%);
+          width: 150px;
+          /* Adjust the width */
+        }
+
+        /* Vertically center the mascot image */
+        .mascot-image {
+          top: 10%;
+          /* Adjust the top position */
+          left: 33%;
+          transform: translateX(-50%) translateY(-50%);
+          /* Vertically center */
+        }
+
+        @keyframes float {
+          0% {
+            transform: translateY(0px);
+          }
+
+          50% {
+            transform: translateY(-20px);
+          }
+
+          100% {
+            transform: translateY(0px);
+          }
+        }
+
+        .btn-primary {
+          background-color: #ff9500;
+          transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+          background-color: #fd7e14;
+          transform: translateY(-2px);
+        }
+
+        .payment-modal {
+          background-color: rgba(0, 0, 0, 0.5);
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 50;
+          display: none;
+          justify-content: center;
+          align-items: center;
+          transition: all 0.3s ease;
+        }
+
+        .payment-modal.active {
+          display: flex;
+        }
+
+        .modal-content {
+          background-color: white;
+          border-radius: 20px;
+          max-width: 90%;
+          width: 400px;
+          animation: modalFadeIn 0.3s;
+        }
+
+        @keyframes modalFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .plan-details-modal {
+          background-color: rgba(0, 0, 0, 0.5);
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 50;
+          display: none;
+          justify-content: center;
+          align-items: center;
+          transition: all 0.3s ease;
+        }
+
+        .plan-details-modal.active {
+          display: flex;
+        }
+
+        #premiumPage {
+          overflow-y: auto;
+          /* Enable scrolling for the premium page */
+        }
+      </style>
+    </head>
+
+    <body>
+      <div id="app" class="min-h-screen">
+        <!-- Login Page -->
+        <div id="loginPage" class="login-container">
+          <img src="https://i.ibb.co/q3N4f0xS/freepik-3d-model-octane-render-volumetric-highly-detailed-18389.png"
+            alt="Mascot" class="mascot-image">
+          <div class="login-card">
+            <div class="text-center mb-8">
+              <div class="inline-block p-4 rounded-full bg-blue-100 mb-4">
+                <!-- Remove play icon -->
+              </div>
+              <h1 class="text-3xl font-bold text-gray-800">Creative Media</h1>
+              <p class="text-gray-600 mt-2">Your premium streaming service</p>
+            </div>
+
+            <form id="loginForm" class="space-y-4">
+              <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                <input type="text" id="username"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+                  placeholder="Enter your username" required>
+              </div>
+
+              <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input type="password" id="password"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition"
+                  placeholder="Enter your password" required>
+              </div>
+
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <input id="remember" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded">
+                  <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                </div>
+
+                <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-500">Forgot password?</a>
+              </div>
+
+              <button type="submit"
+                class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition duration-200">Sign
+                In</button>
+            </form>
+
+            <div class="mt-6 text-center">
+              <p class="text-sm text-gray-600">Don't have an account? <a href="#"
+                  class="font-medium text-blue-600 hover:text-blue-500">Sign up</a></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Premium Page -->
+        <div id="premiumPage" class="hidden min-h-screen bg-gradient-to-b from-blue-100 to-white flex flex-col">
+          <!-- Header -->
+          <header class="bg-white p-4 flex items-center justify-between">
+            <button id="backButton" class="text-gray-800 mr-4">
+              <i class="bi bi-arrow-left text-xl"></i>
+            </button>
+            <h1 class="text-xl font-bold text-center flex-grow">Upgrade Premium</h1>
+            <button id="logoutButton" class="text-blue-600 hover:text-blue-800">Logout</button>
+          </header>
+
+          <!-- Content -->
+          <div class="flex-grow container mx-auto p-6 flex flex-col items-center">
+            <img src="https://i.ibb.co/q3N4f0xS/freepik-3d-model-octane-render-volumetric-highly-detailed-18389.png"
+              alt="Mascot" class="mascot-image">
+            <div class="premium-card w-full max-w-md p-8">
+              <!-- Robot Image -->
+              <div class="robot-container mb-10 flex justify-center">
+                <img src="https://i.ibb.co/jPTwfT62/OTT-super-premium-full-01.jpg" alt="Creativemedia"
+                  class="w-80 h-auto object-contain">
+              </div>
+
+              <!-- Features List -->
+              <div class="space-y-4 mb-8">
+                <div class="flex items-center">
+                  <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                    <i class="bi bi-robot text-blue-500"></i>
+                  </div>
+                  <span class="text-gray-800 font-medium">Welcome</span>
+                </div>
+
+                <div class="flex items-center">
+                  <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                    <i class="bi bi-text-paragraph text-blue-500"></i>
+                  </div>
+                  <span class="text-gray-800 font-medium">Higher Word Limit</span>
+                </div>
+
+                <div class="flex items-center">
+                  <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                    <i class="bi bi-eye-slash text-blue-500"></i>
+                  </div>
+                  <span class="text-gray-800 font-medium">No Ads</span>
+                </div>
+
+                <div class="flex items-center">
+                  <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                    <i class="bi bi-infinity text-blue-500"></i>
+                  </div>
+                  <span class="text-gray-800 font-medium">No Limits</span>
+                </div>
+              </div>
+
+              <!-- Select Plan Text -->
+              <div class="text-center mb-4">
+                <p class="text-sm text-gray-500 uppercase tracking-wide font-semibold">SELECT PLAN</p>
+              </div>
+
+              <!-- Plans -->
+              <div class="grid grid-cols-3 gap-3 mb-6">
+                <div class="plan-card bg-white border border-gray-200 p-3 flex flex-col items-center cursor-pointer"
+                  data-plan="Regular" data-price="1899">
+                  <p class="text-xs text-gray-500 mb-1">Regular</p>
+                  <div class="flex items-baseline">
+                    <span class="text-xs"></span>
+                    <span class="text-2xl font-bold">1899</span>
+                  </div>
+                  <button class="mt-3 w-full py-2 px-4 bg-gray-900 text-white text-xs font-bold rounded buy-btn">BUY</button>
+                  <button class="mt-2 w-full py-1 px-2 bg-blue-500 text-white text-xs font-bold rounded view-details-btn">View
+                    Details</button>
+                </div>
+
+                <div class="plan-card bg-white border border-gray-200 p-3 flex flex-col items-center cursor-pointer selected"
+                  data-plan="Premium" data-price="2999">
+                  <div class="bg-orange-500 text-white text-xs px-2 py-1 rounded absolute -mt-6"></div>
+                  <p class="text-xs text-gray-500 mb-1">Premium</p>
+                  <div class="flex items-baseline">
+                    <span class="text-xs"></span>
+                    <span class="text-2xl font-bold">2999</span>
+                  </div>
+                  <button class="mt-3 w-full py-2 px-4 bg-gray-900 text-white text-xs font-bold rounded buy-btn">BUY</button>
+                  <button class="mt-2 w-full py-1 px-2 bg-blue-500 text-white text-xs font-bold rounded view-details-btn">View
+                    Details</button>
+                </div>
+
+                <div class="plan-card bg-white border border-gray-200 p-3 flex flex-col items-center cursor-pointer"
+                  data-plan="Super Premium" data-price="3999">
+                  <p class="text-xs text-gray-500 mb-1">Super Premium</p>
+                  <div class="flex items-baseline">
+                    <span class="text-xs"></span>
+                    <span class="text-2xl font-bold">3999</span>
+                  </div>
+                  <button class="mt-3 w-full py-2 px-4 bg-gray-900 text-white text-xs font-bold rounded buy-btn">BUY</button>
+                  <button class="mt-2 w-full py-1 px-2 bg-blue-500 text-white text-xs font-bold rounded view-details-btn">View
+                    Details</button>
+                </div>
+              </div>
+
+              <!-- Terms -->
+              <div class="text-xs text-gray-500 text-center">
+                for more contact Creative Media
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Modal with QR Code -->
+        <div id="paymentModal" class="payment-modal">
+          <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-xl font-bold text-gray-900">Payment</h3>
+              <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+
+            <div class="text-center mb-4">
+              <p class="text-sm text-gray-600 mb-2">Scan QR code to pay</p>
+              <p id="planDetails" class="font-medium text-gray-800 mb-4"></p>
+
+              <div class="bg-gray-100 p-4 rounded-lg flex justify-center mb-4">
+                <!-- QR Code placeholder -->
+                <div id="qrCode" class="w-48 h-48 bg-white p-3 rounded-lg flex items-center justify-center">
+                  <img id="qrCodeImage"
+                    src="https://i.ibb.co/q3N4f0xS/freepik-3d-model-octane-render-volumetric-highly-detailed-18389.png"
+                    alt="Creativemedia">
+                  <!-- QR code will be generated here -->
+                </div>
+              </div>
+
+              <p class="text-xs text-gray-500 mb-4">Please complete the payment within 10 minutes</p>
+            </div>
+
+            <div class="flex justify-between">
+              <button id="cancelPayment"
+                class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition">Cancel</button>
+              <button id="confirmPayment"
+                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">I've paid</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan Details Modal -->
+        <div id="planDetailsModal" class="plan-details-modal">
+          <div class="modal-content p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-xl font-bold text-gray-900">Plan Details</h3>
+              <button id="closePlanDetailsModal" class="text-gray-500 hover:text-gray-700">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+            <div id="planDetailsContent">
+              <!-- Plan details will be dynamically inserted here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const loginForm = document.getElementById('loginForm');
+          const loginPage = document.getElementById('loginPage');
+          const premiumPage = document.getElementById('premiumPage');
+          const backButton = document.getElementById('backButton');
+          const logoutButton = document.getElementById('logoutButton');
+          const planCards = document.querySelectorAll('.plan-card');
+          const paymentModal = document.getElementById('paymentModal');
+          const closeModal = document.getElementById('closeModal');
+          const cancelPayment = document.getElementById('cancelPayment');
+          const confirmPayment = document.getElementById('confirmPayment');
+          const planDetails = document.getElementById('planDetails');
+          const qrCodeDiv = document.getElementById('qrCode');
+          const qrCodeImage = document.getElementById('qrCodeImage');
+          const planDetailsModal = document.getElementById('planDetailsModal');
+          const closePlanDetailsModal = document.getElementById('closePlanDetailsModal');
+          const planDetailsContent = document.getElementById('planDetailsContent');
+          const viewDetailsButtons = document.querySelectorAll('.view-details-btn');
+          const mascotImage = document.querySelector('.mascot-image');
+          const buyButtons = document.querySelectorAll('.buy-btn'); // Define buyButtons
+
+          // Credentials
+          const validUsername = 'creative';
+          const validPassword = 'T42J6X2l';
+
+          // Login attempts tracking (using localStorage for simplicity)
+          const ipAddress = '127.0.0.1'; // Replace with actual IP address retrieval if possible
+          let loginAttempts = localStorage.getItem(ipAddress) || 0;
+
+          // Default QR code image URL
+          const defaultQrCodeImageUrl = "https://i.ibb.co/q3N4f0xS/freepik-3d-model-octane-render-volumetric-highly-detailed-18389.png";
+
+          // Function to set the QR code image
+          function setQrCodeImage(imageUrl) {
+            qrCodeImage.src = imageUrl;
+          }
+
+          // Initially set the QR code image to the default
+          setQrCodeImage(defaultQrCodeImageUrl);
+
+          // Function to show plan details
+          function showPlanDetails(planType) {
+            let details = '';
+            switch (planType) {
+              case 'Regular':
+                details = '<p><span>🔹 Regular Plan</span>' +
+                  'Ideal for individual users, the Regular Plan offers essential access with a focus on simplicity and affordability.<br><br>' +
+                  ' Features:<br>' +
+                  ' Single Device Access: Can be used on only one device at a time.<br>' +
+                  ' Secure Login: Designed for low login convenience (up to 20% flexibility).<br>' +
+                  ' Budget-Friendly: Perfect for solo learners looking for a cost-effective option.<br>' +
+                  ' Focused Usage: Best suited for users with consistent device access and minimal switching needs.</p>';
+                break;
+              case 'Premium':
+                details = '<p>🌟 Premium Plan</span>' +
+                  'Designed for flexible learners, the Premium Plan offers enhanced accessibility, more features, and greater value.<br><br>' +
+                  ' Features:<br>' +
+                  ' Dual Device Access:Use on up to 2 devices simultaneously.<br>' +
+                  ' Improved Login Flexibility: Enjoy up to 60% login convenience – switch devices with ease.<br>' +
+                  ' Access to 6+ Learning Apps: Explore a rich library of educational apps to boost your learning journey.<br>' +
+                  ' Smooth Experience: Ideal for users who learn across devices – like home and on-the-go.</p>';
+                break;
+              case 'Super Premium':
+                details = '<p>💎 Super Premium Plan</span>' +
+                  'For those who demand more from their learning experience, the Super Premium Plan offers top-tier access and flexibility.<br><br>' +
+                  ' Features:<br>' +
+                  ' Dual Device Access: Use on 2 devices simultaneously for complete convenience.<br>' +
+                  ' High Login Flexibility: Enjoy up to 80% login convenience – switch devices effortlessly.<br>' +
+                  ' Access to 10+ Premium Learning Apps: Unlock a comprehensive suite of educational tools and content.<br>' +
+                  ' Priority Support: Get faster and dedicated assistance when needed.<br>' +
+                  ' Elite Learning Experience: Ideal for advanced learners and families who want the best.</p>';
+                break;
+              default:
+                details = '<p>Details not available.</p>';
+            }
+            planDetailsContent.innerHTML = details;
+            planDetailsModal.classList.add('active');
+          }
+
+          // Handle login form submission
+          loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (loginAttempts >= 3) {
+              alert('Too many failed login attempts. Please try again later.');
+              return;
+            }
+
+            // Simple validation (in a real app, you would verify credentials with a server)
+            if (username === validUsername && password === validPassword) {
+              // Reset login attempts on successful login
+              localStorage.setItem(ipAddress, 0);
+
+              // Show premium page
+              loginPage.style.display = 'none'; // Hide login page
+              premiumPage.classList.remove('hidden');
+            } else {
+              loginAttempts++;
+              localStorage.setItem(ipAddress, loginAttempts);
+              alert('Invalid username or password. Attempts remaining: ' + (10 - loginAttempts));
+            }
+          });
+
+          // Handle back button
+          backButton.addEventListener('click', function () {
+            premiumPage.classList.add('hidden');
+            loginPage.style.display = 'block'; // Show login page
+          });
+
+          // Handle logout button
+          logoutButton.addEventListener('click', function () {
+            premiumPage.classList.add('hidden');
+            loginPage.style.display = 'block'; // Show login page
+          });
+
+          // Handle plan selection
+          planCards.forEach(card => {
+            card.addEventListener('click', function (e) {
+              // Remove selected class from all cards
+              planCards.forEach(c => c.classList.remove('selected'));
+
+              // Add selected class to clicked card
+              this.classList.add('selected');
+            });
+          });
+
+          // Handle buy buttons
+          buyButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+              e.stopPropagation(); // Prevent triggering the card click event
+              const planCard = this.closest('.plan-card');
+              const planType = planCard.getAttribute('data-plan');
+              const planPrice = planCard.getAttribute('data-price');
+
+              // Show plan details in the modal
+              planDetails.textContent = `${planType} Plan - $${planPrice}`;
+
+              // Generate QR Code for payment
+              // generateQRCode(`CreativeMedia:${planType}:${planPrice}`);
+              setQrCodeImage(defaultQrCodeImageUrl);
+
+              // Show payment modal
+              paymentModal.classList.add('active');
+            });
+          });
+
+          // Handle view details buttons
+          viewDetailsButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+              e.stopPropagation(); // Prevent triggering the card click event
+              const planCard = this.closest('.plan-card');
+              const planType = planCard.getAttribute('data-plan');
+              showPlanDetails(planType);
+            });
+          });
+
+          // Close modal functions
+          function closePaymentModal() {
+            paymentModal.classList.remove('active');
+          }
+
+          closeModal.addEventListener('click', closePaymentModal);
+          cancelPayment.addEventListener('click', closePaymentModal);
+
+          confirmPayment.addEventListener('click', function () {
+            closePaymentModal();
+            alert('Thank you for your payment! Your premium subscription has been activated.');
+          });
+
+          // Close plan details modal
+          closePlanDetailsModal.addEventListener('click', function () {
+            planDetailsModal.classList.remove('active');
+          });
+
+          // Generate QR Code function
+          function generateQRCode(data) {
+            qrCodeDiv.innerHTML = ''; // Clear previous QR code
+
+            QRCode.toCanvas(
+              document.createElement('canvas'),
+              data,
+              { width: 180 },
+              function (error, canvas) {
+                if (error) console.error(error);
+                qrCodeDiv.appendChild(canvas);
+              }
+            );
+          }
+
+          // Close modal if clicked outside
+          paymentModal.addEventListener('click', function (e) {
+            if (e.target === paymentModal) {
+              closePaymentModal();
+            }
+          });
+
+          // Close plan details modal if clicked outside
+          planDetailsModal.addEventListener('click', function (e) {
+            if (e.target === planDetailsModal) {
+              planDetailsModal.classList.remove('active');
+            }
+          });
+        });
+      </script>
+      <script>document.body.addEventListener('wheel', e => {
+          if (!e.ctrlKey) return; e.preventDefault(); return
+        }, { passive: false })</script>
+      <script>document.body.addEventListener('wheel', e => {
+          if (!e.ctrlKey) return; e.preventDefault(); return
+        }, { passive: false })</script>
+      <script>document.body.addEventListener('wheel', e => {
+          if (!e.ctrlKey) return; e.preventDefault(); return
+        }, { passive: false })</script>
+      <script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+    <script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+
+    </html>
